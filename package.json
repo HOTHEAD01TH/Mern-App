@@ -1,0 +1,18 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Todo full stack app using node express react and mongo",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon backend/index.js",
+   "start": "nodemon backend/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4"
+  }
+}

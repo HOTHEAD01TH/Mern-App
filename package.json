@@ -4,9 +4,13 @@
   "type": "module",
   "description": "Todo full stack app using node express react and mongo",
   "main": "index.js",
+  
+    "ignore": ["*.test.js", "node_modules/*"],
+  
   "scripts": {
     "dev": "nodemon backend/index.js",
     "start": "nodemon backend/index.js"
+    
   },
   "keywords": [],
   "author": "",
@@ -19,3 +23,4 @@
     "nodemon": "^3.1.4"
   }
 }
+

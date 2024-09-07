@@ -1,9 +1,13 @@
+
+
+
 const express = require('express');
-const { signup } = require('../controller/user.controller'); // Import signup function
+const { signup } = require('../controller/user.controller.js'); // Make sure signup is imported
 
 const router = express.Router();
 
-// Route for signup
-router.post('/signup', signup); // Use signup as the route handler for POST requests to "/signup"
+// Define the POST route for signup
+router.post('/signup', signup);
 
 module.exports = router;
+

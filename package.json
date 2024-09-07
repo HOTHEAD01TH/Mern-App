@@ -4,18 +4,19 @@
   "type": "module",
   "description": "Todo full stack app using node express react and mongo",
   "main": "index.js",
-  
-    "ignore": ["*.test.js", "node_modules/*"],
-  
+  "ignore": [
+    "*.test.js",
+    "node_modules/*"
+  ],
   "scripts": {
     "dev": "nodemon backend/index.js",
     "start": "nodemon backend/index.js"
-    
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongodb": "^6.8.0",
@@ -23,4 +24,3 @@
     "nodemon": "^3.1.4"
   }
 }
-

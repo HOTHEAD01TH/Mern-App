@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv'); // Load environment variables
-const userRoutes = require('./routes/user.route'); // Import the routes
-const authRoutes = require('./routes/auth.route'); 
+const cors = require('cors'); // Import CORS
+const userRoutes = require('./routes/user.route.js'); // Import the routes
+const authRoutes = require('./routes/auth.route.js'); 
+
 dotenv.config(); // Load environment variables from .env file
 
 // Connect to MongoDB
@@ -15,14 +17,13 @@ mongoose
     console.error('Error connecting to MongoDB:', err);
   });
 
-
 const app = express();
-
 
 // Middleware to parse JSON
 app.use(express.json());
 
-
+// Use CORS middleware
+app.use(cors());
 
 // Routes
 app.use("/api/user", userRoutes);
@@ -43,6 +44,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-
-
-

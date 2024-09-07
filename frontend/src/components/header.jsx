@@ -38,7 +38,12 @@ const Header = () => {
   );
 
   return (
-    <AppBar position="static" sx={{ background: 'linear-gradient(90deg, #6a11cb, #2575fc)' }}>
+    <AppBar 
+      position="static" 
+      sx={{ 
+        background: 'linear-gradient(90deg, #ccffcc 0%, #add8e6 70%)' // Light green to light blue gradient
+      }}
+    >
       <Toolbar>
         {/* Logo on the Left */}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>

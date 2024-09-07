@@ -9,5 +9,6 @@ const router = express.Router();
 // Define the POST route for signup
 router.post('/signup', signup);
 
+
 module.exports = router;
 

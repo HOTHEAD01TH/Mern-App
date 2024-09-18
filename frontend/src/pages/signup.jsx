@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './signup.css'; // Custom CSS file
+import GoogleOAuthButton from '../components/Oauth'; 
 import 'mdb-react-ui-kit/dist/css/mdb.min.css'; // MDBootstrap CSS
 import {
   MDBBtn,
@@ -103,6 +104,7 @@ export default function SignUp() {
             <MDBBtn className='mb-4 w-100 gradient-custom-4' size='lg' type='submit' disabled={loading}>
               {loading ? 'Loading...' : 'Register'}
             </MDBBtn>
+            <GoogleOAuthButton />
             <div className="text-center">
               <p>Already have an account?</p>
               <Link to='/signin' className='text-blue-500'>Sign in</Link>

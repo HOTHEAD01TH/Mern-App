@@ -16,6 +16,7 @@
     "@mui/material": "^6.0.2",
     "@reduxjs/toolkit": "^2.2.7",
     "autoprefixer": "^10.4.20",
+    "firebase": "^10.13.1",
     "mdb-react-ui-kit": "^8.0.0",
     "postcss": "^8.4.45",
     "react": "^18.3.1",

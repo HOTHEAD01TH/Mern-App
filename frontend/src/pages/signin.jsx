@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import GoogleOAuthButton from '../components/Oauth'; 
 import {
   signInStart,
   signInSuccess,
@@ -99,6 +101,7 @@ export default function SignIn() {
             <MDBBtn className='mb-4 w-100 gradient-custom-4' size='lg' type='submit' disabled={loading}>
               {loading ? 'Loading...' : 'Login'}
             </MDBBtn>
+            <GoogleOAuthButton />
             <div className="text-center">
               <p>Dont have an account?</p>
               <Link to='/signup' className='text-blue-500'>Sign up</Link>

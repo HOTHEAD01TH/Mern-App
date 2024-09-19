@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemText, Avatar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useState } from 'react';
+import { useSelector } from 'react-redux'; // For accessing the currentUser
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+
+  // Access currentUser from Redux
+  const { currentUser } = useSelector((state) => state.user);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -27,12 +31,20 @@ const Header = () => {
         <ListItem button component={Link} to="/aboutus">
           <ListItemText primary="About" />
         </ListItem>
-        <ListItem button component={Link} to="/signup">
-          <ListItemText primary="Sign Up" />
-        </ListItem>
-        <ListItem button component={Link} to="/signin">
-          <ListItemText primary="Sign In" />
-        </ListItem>
+        {!currentUser ? (
+          <>
+            <ListItem button component={Link} to="/signup">
+              <ListItemText primary="Sign Up" />
+            </ListItem>
+            <ListItem button component={Link} to="/signin">
+              <ListItemText primary="Sign In" />
+            </ListItem>
+          </>
+        ) : (
+          <ListItem button component={Link} to="/profile">
+            <ListItemText primary="Profile" />
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -62,11 +74,23 @@ const Header = () => {
         </IconButton>
 
         {/* Navigation Links on Desktop */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '20px' }}>
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '20px', alignItems: 'center' }}>
           <Button sx={{ color: 'white' }} component={Link} to="/">Home</Button>
           <Button sx={{ color: 'white' }} component={Link} to="/aboutus">About</Button>
-          <Button sx={{ color: 'white' }} component={Link} to="/signup">Sign Up</Button>
-          <Button sx={{ color: 'white' }} component={Link} to="/signin">Sign In</Button>
+          {!currentUser ? (
+            <>
+              <Button sx={{ color: 'white' }} component={Link} to="/signup">Sign Up</Button>
+              <Button sx={{ color: 'white' }} component={Link} to="/signin">Sign In</Button>
+            </>
+          ) : (
+            <Link to="/profile">
+              <Avatar
+                alt="https://ibb.co/ygpBtBP"
+                src={currentUser.profilePicture}
+                sx={{ width: 32, height: 32, cursor: 'pointer' }}
+              />
+            </Link>
+          )}
         </Box>
       </Toolbar>
 

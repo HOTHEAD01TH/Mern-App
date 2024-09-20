@@ -1,22 +1,17 @@
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
-import { app } from '../firebase'; // Ensure this path is correct for your project
+import { app } from '../firebase';
 import { useDispatch } from 'react-redux';
 import { signInSuccess } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
-import { MDBBtn } from 'mdb-react-ui-kit';
-import { useState } from 'react';
 
-export default function GoogleOAuthButton() {
+export default function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
   const handleGoogleClick = async () => {
     try {
-      setLoading(true);
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
-
       const result = await signInWithPopup(auth, provider);
 
       const res = await fetch('/api/auth/google', {
@@ -31,30 +26,26 @@ export default function GoogleOAuthButton() {
         }),
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
-        throw new Error('Failed to authenticate with Google');
+        throw new Error(`HTTP error! status: ${res.status}`);
       }
 
+      const data = await res.json();
+      console.log(data);
       dispatch(signInSuccess(data));
       navigate('/');
     } catch (error) {
-      console.log('Could not log in with Google', error);
-    } finally {
-      setLoading(false);
+      console.log('could not login with google', error);
     }
   };
 
   return (
-    <MDBBtn 
-      className='mb-4 w-100 gradient-custom-4' 
-      size='lg' 
-      type='button' 
+    <button
+      type='button'
       onClick={handleGoogleClick}
-      disabled={loading}
+      className='bg-red-700 text-white rounded-lg p-3 uppercase hover:opacity-95'
     >
-      {loading ? 'Loading...' : 'Continue with Google'}
-    </MDBBtn>
+      Continue with google
+    </button>
   );
 }

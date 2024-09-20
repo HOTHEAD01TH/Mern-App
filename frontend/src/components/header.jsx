@@ -1,109 +1,30 @@
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemText, Avatar } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import { useState } from 'react';
-import { useSelector } from 'react-redux'; // For accessing the currentUser
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const Header = () => {
-  const [open, setOpen] = useState(false);
-
-  // Access currentUser from Redux
+export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
-
-  const toggleDrawer = (open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-    setOpen(open);
-  };
-
-  const drawerContent = (
-    <Box
-      sx={{ width: 250 }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <List>
-        <ListItem button component={Link} to="/">
-          <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem button component={Link} to="/aboutus">
-          <ListItemText primary="About" />
-        </ListItem>
-        {!currentUser ? (
-          <>
-            <ListItem button component={Link} to="/signup">
-              <ListItemText primary="Sign Up" />
-            </ListItem>
-            <ListItem button component={Link} to="/signin">
-              <ListItemText primary="Sign In" />
-            </ListItem>
-          </>
-        ) : (
-          <ListItem button component={Link} to="/profile">
-            <ListItemText primary="Profile" />
-          </ListItem>
-        )}
-      </List>
-    </Box>
-  );
-
   return (
-    <AppBar 
-      position="static" 
-      sx={{ 
-        background: 'linear-gradient(90deg, #ccffcc 0%, #add8e6 70%)' // Light green to light blue gradient
-      }}
-    >
-      <Toolbar>
-        {/* Logo on the Left */}
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-          <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>MyLogo</Link>
-        </Typography>
-
-        {/* Hamburger Menu for Mobile */}
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ display: { xs: 'block', md: 'none' } }}
-          onClick={toggleDrawer(true)}
-        >
-          <MenuIcon />
-        </IconButton>
-
-        {/* Navigation Links on Desktop */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: '20px', alignItems: 'center' }}>
-          <Button sx={{ color: 'white' }} component={Link} to="/">Home</Button>
-          <Button sx={{ color: 'white' }} component={Link} to="/aboutus">About</Button>
-          {!currentUser ? (
-            <>
-              <Button sx={{ color: 'white' }} component={Link} to="/signup">Sign Up</Button>
-              <Button sx={{ color: 'white' }} component={Link} to="/signin">Sign In</Button>
-            </>
-          ) : (
-            <Link to="/profile">
-              <Avatar
-                alt="https://ibb.co/ygpBtBP"
-                src={currentUser.profilePicture}
-                sx={{ width: 32, height: 32, cursor: 'pointer' }}
-              />
-            </Link>
-          )}
-        </Box>
-      </Toolbar>
-
-      {/* Drawer for Mobile */}
-      <Drawer
-        anchor='left'
-        open={open}
-        onClose={toggleDrawer(false)}
-      >
-        {drawerContent}
-      </Drawer>
-    </AppBar>
+    <div className='bg-slate-200'>
+      <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
+        <Link to='/'>
+          <h1 className='font-bold'>Auth App</h1>
+        </Link>
+        <ul className='flex gap-4'>
+          <Link to='/'>
+            <li>Home</li>
+          </Link>
+          <Link to='/about'>
+            <li>About</li>
+          </Link>
+          <Link to='/profile'>
+            {currentUser ? (
+              <img src={currentUser.profilePicture} alt='profile' className='h-7 w-7 rounded-full object-cover' />
+            ) : (
+              <li>Sign In</li>
+            )}
+          </Link>
+        </ul>
+      </div>
+    </div>
   );
-};
-
-export default Header;
+}

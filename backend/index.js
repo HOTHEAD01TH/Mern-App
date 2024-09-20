@@ -1,46 +1,49 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv'); // Load environment variables
-const cors = require('cors'); // Import CORS
-const userRoutes = require('./routes/user.route.js'); // Import the routes
-const authRoutes = require('./routes/auth.route.js'); 
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import userRoutes from './routes/user.route.js';
+import authRoutes from './routes/auth.route.js';
+import cookieParser from 'cookie-parser';
+import path from 'path';
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config();
 
-// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO)
   .then(() => {
     console.log('Connected to MongoDB');
   })
   .catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
+    console.log(err);
   });
+
+const __dirname = path.resolve();
 
 const app = express();
 
-// Middleware to parse JSON
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
+
 app.use(express.json());
 
-// Use CORS middleware
-app.use(cors());
+app.use(cookieParser());
 
-// Routes
-app.use("/api/user", userRoutes);
-app.use('/api/auth', authRoutes); // Use the user routes under "/api/user"
-
-// Root Route (optional)
-app.get('/', (req, res) => {
-  res.send('Welcome to the API');
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
 });
 
-// Fallback route for undefined paths
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
+app.use('/api/user', userRoutes);
+app.use('/api/auth', authRoutes);
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    statusCode,
+  });
 });

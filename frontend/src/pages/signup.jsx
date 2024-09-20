@@ -1,26 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './signup.css'; // Custom CSS file
-import GoogleOAuthButton from '../components/Oauth'; 
-import 'mdb-react-ui-kit/dist/css/mdb.min.css'; // MDBootstrap CSS
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBInput
-} from 'mdb-react-ui-kit';
+import OAuth from '../components/OAuth';
 
 export default function SignUp() {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: ''
-  });
-  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -29,8 +15,7 @@ export default function SignUp() {
     e.preventDefault();
     try {
       setLoading(true);
-      setError('');
-      
+      setError(false);
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -38,81 +23,59 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
-
-      if (!res.ok) {
-        setError('Signup failed. Please try again.');
-        setLoading(false);
-        return;
-      }
-
       const data = await res.json();
-      console.log('Response data:', data);
-
+      console.log(data);
       setLoading(false);
-
       if (data.success === false) {
-        setError(data.message || 'Signup failed. Please try again.');
+        setError(true);
         return;
       }
-
-      navigate('/signin');
+      navigate('/sign-in');
     } catch (error) {
-      console.error('Error during signup:', error);
-      setError('Something went wrong! Please try again later.');
       setLoading(false);
+      setError(true);
     }
   };
-
   return (
-    <MDBContainer fluid className='d-flex align-items-center justify-content-center bg-image' style={{ 
-      backgroundImage: 'url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp)', 
-      height: '100vh',
-      padding: '15px' // Add padding for better mobile view
-    }}>
-      <div className='mask gradient-custom-3'></div>
-      <MDBCard className='m-5 w-100' style={{ maxWidth: '600px' }}>
-        <MDBCardBody className='px-3 py-4'>
-          <h2 className="text-uppercase text-center mb-5">Create an account</h2>
-          <form onSubmit={handleSubmit}>
-            <MDBInput 
-              wrapperClass='mb-4' 
-              label='Your Name' 
-              size='lg' 
-              id='username' 
-              type='text' 
-              onChange={handleChange} 
-              required
-            />
-            <MDBInput 
-              wrapperClass='mb-4' 
-              label='Your Email' 
-              size='lg' 
-              id='email' 
-              type='email' 
-              onChange={handleChange} 
-              required
-            />
-            <MDBInput 
-              wrapperClass='mb-4' 
-              label='Password' 
-              size='lg' 
-              id='password' 
-              type='password' 
-              onChange={handleChange} 
-              required
-            />
-            <MDBBtn className='mb-4 w-100 gradient-custom-4' size='lg' type='submit' disabled={loading}>
-              {loading ? 'Loading...' : 'Register'}
-            </MDBBtn>
-            <GoogleOAuthButton />
-            <div className="text-center">
-              <p>Already have an account?</p>
-              <Link to='/signin' className='text-blue-500'>Sign in</Link>
-            </div>
-            {error && <p className='text-red-700 mt-5'>{error}</p>}
-          </form>
-        </MDBCardBody>
-      </MDBCard>
-    </MDBContainer>
+    <div className='p-3 max-w-lg mx-auto'>
+      <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+        <input
+          type='text'
+          placeholder='Username'
+          id='username'
+          className='bg-slate-100 p-3 rounded-lg'
+          onChange={handleChange}
+        />
+        <input
+          type='email'
+          placeholder='Email'
+          id='email'
+          className='bg-slate-100 p-3 rounded-lg'
+          onChange={handleChange}
+        />
+        <input
+          type='password'
+          placeholder='Password'
+          id='password'
+          className='bg-slate-100 p-3 rounded-lg'
+          onChange={handleChange}
+        />
+        <button
+          disabled={loading}
+          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
+        >
+          {loading ? 'Loading...' : 'Sign Up'}
+        </button>
+        <OAuth />
+      </form>
+      <div className='flex gap-2 mt-5'>
+        <p>Have an account?</p>
+        <Link to='/sign-in'>
+          <span className='text-blue-500'>Sign in</span>
+        </Link>
+      </div>
+      <p className='text-red-700 mt-5'>{error && 'Something went wrong!'}</p>
+    </div>
   );
 }

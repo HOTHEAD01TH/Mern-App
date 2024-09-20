@@ -1,14 +1,15 @@
-
-
-
-const express = require('express');
-const { signup } = require('../controller/user.controller.js'); // Make sure signup is imported
+import express from 'express';
+import {
+  test,
+  updateUser,
+  deleteUser,
+} from '../controller/user.controller.js';
+import { verifyToken } from '../utils/verifyUser.js';
 
 const router = express.Router();
 
-// Define the POST route for signup
-router.post('/signup', signup);
+router.get('/', test);
+router.post('/update/:id', verifyToken, updateUser);
+router.delete('/delete/:id', verifyToken, deleteUser);
 
-
-module.exports = router;
-
+export default router;
